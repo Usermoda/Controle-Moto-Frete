@@ -169,6 +169,36 @@ html, body {
   align-items: center;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-icon-only {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s;
+}
+.btn-icon-only:hover { color: var(--text); background: var(--bg-elev-2); }
+.btn-icon-only:active { transform: scale(0.92); }
+.btn-icon-only > svg { width: 18px; height: 18px; }
+.btn-icon-only.syncing > svg { animation: spin 0.8s linear infinite; }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .sync-status {
   display: inline-flex;
   align-items: center;

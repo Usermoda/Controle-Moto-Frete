@@ -152,19 +152,25 @@ async function bootstrapApp() {
   reRenderAll();
 }
 
-// Sync manual — força GET do JSONBin
+// Sync manual — envia pendentes primeiro (se houver), depois baixa do JSONBin
 async function sincronizarDaNuvem() {
-  if (!confirm('Isso vai substituir os dados locais pelos do JSONBin. Alterações locais não salvas serão perdidas. Continuar?')) return;
+  const $btn = document.getElementById('header-sync');
+  if ($btn) $btn.classList.add('syncing');
   try {
+    // 1. Envia alterações locais pendentes primeiro (se houver)
+    await flush().catch(() => {});
+    // 2. Baixa versão mais recente do JSONBin
     setSyncStatus('saving', 'Baixando do JSONBin...');
     const remote = await loadRemote();
     applyData(remote);
     setSyncStatus('saved', 'Sincronizado');
     reRenderAll();
-    toast('Dados atualizados da nuvem', 'success');
+    toast('Dados sincronizados', 'success');
   } catch (err) {
     setSyncStatus('error', err.message);
-    toast('Erro: ' + err.message, 'error');
+    toast('Erro na sync: ' + err.message, 'error');
+  } finally {
+    if ($btn) $btn.classList.remove('syncing');
   }
 }
 
@@ -227,6 +233,10 @@ window.addEventListener('DOMContentLoaded', () => {
   // FAB (mobile) — reusa handler do botão novo
   const $fab = document.getElementById('fab-novo');
   if ($fab) $fab.onclick = () => document.getElementById('btn-novo').click();
+
+  // Botão de sync no header
+  const $headerSync = document.getElementById('header-sync');
+  if ($headerSync) $headerSync.onclick = () => sincronizarDaNuvem();
 
   // Gate de auth
   if (!isLoggedIn()) {
