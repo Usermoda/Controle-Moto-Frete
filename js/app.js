@@ -38,6 +38,9 @@ function showSetup() {
 function showApp() {
   document.getElementById('setup-screen').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
+  // Mostra FAB se a aba atual é lancamentos (padrão)
+  const $fab = document.getElementById('fab-novo');
+  if ($fab) $fab.classList.toggle('visible', state.currentTab === 'lancamentos');
 }
 
 function bindSetup() {
@@ -110,7 +113,6 @@ function bindTabs() {
       if ($fab) $fab.classList.toggle('visible', name === 'lancamentos');
     };
   });
-  if ($fab) $fab.classList.add('visible'); // aba padrão = lancamentos
 }
 
 function toast(message, type = 'info') {
