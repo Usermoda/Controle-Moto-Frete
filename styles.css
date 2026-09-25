@@ -851,6 +851,10 @@ input[type="password"], select {
   }
   .summary-card { padding: 10px 12px; }
   .summary-card .value { font-size: 18px; }
+  /* Último card sozinho na linha ocupa a largura toda (evita buraco) */
+  .summary-cards > .summary-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
 
   /* Modal fullscreen mobile */
   .modal { padding: 0; }
