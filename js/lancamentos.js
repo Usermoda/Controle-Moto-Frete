@@ -42,11 +42,55 @@ function openModal(lanc = null) {
     $('#f-descricao').value = 'Faturamento do dia';
     $('#f-referencia').value = 'Diario';
   }
+  aplicarRegrasCategoria();
   modal.classList.remove('hidden');
 }
 
 function closeModal() {
   $('#modal-lancamento').classList.add('hidden');
+}
+
+// Mapeamento categoria → tipo padrão
+const CATEGORIA_TIPO = {
+  'Entrega': 'Receita',
+  'Bonus': 'Receita',
+  'Gorjeta': 'Receita',
+  'Combustivel': 'Despesa',
+  'Manutencao': 'Despesa',
+  'Alimentacao': 'Despesa',
+  'Outros': 'Despesa',
+  'Folga': 'Controle'
+};
+
+function aplicarRegrasCategoria() {
+  const cat = $('#f-categoria').value;
+  const tipoSugerido = CATEGORIA_TIPO[cat];
+  if (tipoSugerido) $('#f-tipo').value = tipoSugerido;
+
+  const isFolga = cat === 'Folga';
+  const $valor = $('#f-valor'), $app = $('#f-app'), $km = $('#f-km'),
+        $desc = $('#f-descricao'), $guardado = $('#f-guardado'), $ref = $('#f-referencia');
+
+  if (isFolga) {
+    $valor.value = 0;         $valor.disabled = true;
+    $app.value = '';          $app.disabled = true;
+    $km.value = '';           $km.disabled = true;
+    $guardado.value = 0;      $guardado.disabled = true;
+    $desc.value = 'Dia de folga';
+    $ref.value = 'Diario';
+  } else {
+    $valor.disabled = false;
+    $app.disabled = false;
+    $km.disabled = false;
+    $guardado.disabled = false;
+    // Descrição padrão só se tá vazia ou era "Dia de folga"
+    if (!$desc.value || $desc.value === 'Dia de folga') {
+      $desc.value = tipoSugerido === 'Receita' ? 'Faturamento do dia' :
+                    cat === 'Combustivel' ? 'Abastecimento' :
+                    cat === 'Manutencao' ? 'Manutenção da moto' :
+                    cat === 'Alimentacao' ? 'Alimentação' : '';
+    }
+  }
 }
 
 function populateSelect(el, options) {
@@ -169,6 +213,7 @@ function renderLancamentos() {
 function initLancamentosUI() {
   $('#btn-novo').onclick = () => openModal();
   $('#form-lancamento').onsubmit = submitForm;
+  $('#f-categoria').onchange = aplicarRegrasCategoria;
 
   document.querySelectorAll('#modal-lancamento [data-close]').forEach(el => {
     el.onclick = closeModal;
