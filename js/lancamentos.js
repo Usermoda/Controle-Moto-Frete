@@ -1,7 +1,7 @@
 // ===== lancamentos.js — CRUD + form =====
 const $ = (sel) => document.querySelector(sel);
 
-const filters = { mes: '', tipo: '' };
+const filters = { mes: '', tipo: '', categoria: '', app: '' };
 
 function uid() {
   return `l-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -175,17 +175,27 @@ function fmtData(l) {
 }
 
 function renderLancamentos() {
-  const $mes = $('#filter-mes');
+  // Popula filtros dinâmicos
+  const $mes = $('#filter-mes'), $cat = $('#filter-categoria'), $app = $('#filter-app');
   const mesesUnicos = [...new Set(state.data.lancamentos.map(l => l.mes).filter(Boolean))]
     .sort((a, b) => MESES.indexOf(a) - MESES.indexOf(b));
-  const curMes = $mes.value;
-  $mes.innerHTML = '<option value="">Todos os meses</option>' +
-    mesesUnicos.map(m => `<option value="${m}">${m}</option>`).join('');
-  if (mesesUnicos.includes(curMes)) $mes.value = curMes;
+  const catsUnicas = [...new Set(state.data.lancamentos.map(l => l.categoria).filter(Boolean))].sort();
+  const appsUnicos = [...new Set(state.data.lancamentos.map(l => l.app).filter(Boolean))].sort();
+
+  const rebuild = (el, placeholder, opts, current) => {
+    el.innerHTML = `<option value="">${placeholder}</option>` +
+      opts.map(o => `<option value="${o}">${o}</option>`).join('');
+    if (opts.includes(current)) el.value = current;
+  };
+  rebuild($mes, 'Todos os meses', mesesUnicos, $mes.value);
+  rebuild($cat, 'Todas categorias', catsUnicas, $cat.value);
+  rebuild($app, 'Todos os apps', appsUnicos, $app.value);
 
   let list = state.data.lancamentos.filter(l => {
     if (filters.mes && l.mes !== filters.mes) return false;
     if (filters.tipo && l.tipo !== filters.tipo) return false;
+    if (filters.categoria && l.categoria !== filters.categoria) return false;
+    if (filters.app && l.app !== filters.app) return false;
     return true;
   });
   list = ordenarLancs(list);
@@ -238,10 +248,9 @@ function initLancamentosUI() {
     el.onclick = closeModal;
   });
 
-  $('#filter-mes').onchange = (e) => {
-    filters.mes = e.target.value;
-    renderLancamentos();
-  };
+  $('#filter-mes').onchange = (e) => { filters.mes = e.target.value; renderLancamentos(); };
+  $('#filter-categoria').onchange = (e) => { filters.categoria = e.target.value; renderLancamentos(); };
+  $('#filter-app').onchange = (e) => { filters.app = e.target.value; renderLancamentos(); };
   document.querySelectorAll('#filter-tipo .chip').forEach(chip => {
     chip.onclick = () => {
       document.querySelectorAll('#filter-tipo .chip').forEach(c => c.classList.remove('active'));
@@ -250,6 +259,15 @@ function initLancamentosUI() {
       renderLancamentos();
     };
   });
+  const $limpar = $('#filter-limpar');
+  if ($limpar) $limpar.onclick = () => {
+    filters.mes = filters.tipo = filters.categoria = filters.app = '';
+    $('#filter-mes').value = '';
+    $('#filter-categoria').value = '';
+    $('#filter-app').value = '';
+    document.querySelectorAll('#filter-tipo .chip').forEach(c => c.classList.toggle('active', c.dataset.tipo === ''));
+    renderLancamentos();
+  };
 
   $('#tabela-lancamentos tbody').addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-action]');

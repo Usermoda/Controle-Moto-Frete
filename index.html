@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0f172a" />
   <title>Controle Motofrete</title>
-  <link rel="stylesheet" href="styles.css?v=8" />
+  <link rel="stylesheet" href="styles.css?v=9" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="apple-touch-icon" href="favicon.svg" />
@@ -118,12 +118,19 @@
             <select id="filter-mes" class="input">
               <option value="">Todos os meses</option>
             </select>
+            <select id="filter-categoria" class="input">
+              <option value="">Todas categorias</option>
+            </select>
+            <select id="filter-app" class="input">
+              <option value="">Todos os apps</option>
+            </select>
             <div class="chips" id="filter-tipo">
               <button class="chip active" data-tipo="">Todos</button>
               <button class="chip" data-tipo="Receita">Receita</button>
               <button class="chip" data-tipo="Despesa">Despesa</button>
               <button class="chip" data-tipo="Controle">Controle</button>
             </div>
+            <button id="filter-limpar" class="btn btn-secondary btn-icon" title="Limpar filtros" data-icon="x"></button>
           </div>
           <div class="btn-row">
             <button class="btn btn-secondary" data-export="excel:lancamentos" title="Exportar em Excel"><span data-icon="fileXls"></span><span class="btn-label">Excel</span></button>
@@ -366,16 +373,16 @@
 
   <button id="fab-novo" class="fab" title="Novo lançamento" aria-label="Novo lançamento" data-icon="plus"></button>
 
-  <script src="js/credentials.js?v=8"></script>
-  <script src="js/auth.js?v=8"></script>
-  <script src="js/icons.js?v=8"></script>
-  <script src="js/seed-data.js?v=8"></script>
-  <script src="js/storage.js?v=8"></script>
-  <script src="js/resumos.js?v=8"></script>
-  <script src="js/resumos-ui.js?v=8"></script>
-  <script src="js/lancamentos.js?v=8"></script>
-  <script src="js/config-ui.js?v=8"></script>
-  <script src="js/export.js?v=8"></script>
-  <script src="js/app.js?v=8"></script>
+  <script src="js/credentials.js?v=9"></script>
+  <script src="js/auth.js?v=9"></script>
+  <script src="js/icons.js?v=9"></script>
+  <script src="js/seed-data.js?v=9"></script>
+  <script src="js/storage.js?v=9"></script>
+  <script src="js/resumos.js?v=9"></script>
+  <script src="js/resumos-ui.js?v=9"></script>
+  <script src="js/lancamentos.js?v=9"></script>
+  <script src="js/config-ui.js?v=9"></script>
+  <script src="js/export.js?v=9"></script>
+  <script src="js/app.js?v=9"></script>
 </body>
 </html>
