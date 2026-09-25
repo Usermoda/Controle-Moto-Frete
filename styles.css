@@ -546,6 +546,11 @@ input[type="password"], select {
 
 .table tr:last-child td { border-bottom: none; }
 .table tbody tr:hover { background: var(--bg-elev-2); }
+.table tbody tr.highlighted {
+  background: rgba(59, 130, 246, 0.12);
+  outline: 1px solid rgba(59, 130, 246, 0.3);
+}
+.table tbody tr.highlighted td { font-weight: 600; }
 
 .table-compact th, .table-compact td { padding: 8px 10px; font-size: 13px; }
 

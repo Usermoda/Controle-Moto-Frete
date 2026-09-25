@@ -257,6 +257,7 @@ window.addEventListener('DOMContentLoaded', () => {
   bindTabs();
   initLancamentosUI();
   initConfigUI();
+  initMensalUI();
   initExportUI();
   initDropdowns();
   initLoginUI();
