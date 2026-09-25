@@ -754,8 +754,16 @@ input[type="password"], select {
   .app-header { padding: 10px 12px; padding-top: max(10px, var(--sat)); }
   .brand { font-size: 16px; }
 
-  /* Toolbar mais compacto */
-  .toolbar { gap: 8px; }
+  /* Toolbar empilhado em coluna no mobile */
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .toolbar .btn-row {
+    width: 100%;
+    justify-content: flex-end;
+  }
   .filters {
     display: grid;
     grid-template-columns: 1fr 1fr auto;
@@ -765,11 +773,13 @@ input[type="password"], select {
       "tipo tipo tipo";
     width: 100%;
     gap: 6px;
+    flex: none;
   }
   #filter-mes { grid-area: mes; }
   #filter-categoria { grid-area: categoria; }
   #filter-app { grid-area: app; }
-  #filter-tipo { grid-area: tipo; overflow-x: auto; }
+  #filter-tipo { grid-area: tipo; overflow-x: auto; scrollbar-width: none; }
+  #filter-tipo::-webkit-scrollbar { display: none; }
   #filter-limpar { grid-area: limpar; margin-left: 0; }
   .filters .input { width: 100%; min-width: 0; }
 
