@@ -7,8 +7,9 @@
   <title>Controle Motofrete</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛵</text></svg>" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛵</text></svg>" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="mask-icon" href="favicon.svg" color="#3b82f6" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -18,7 +19,12 @@
 <body>
   <div id="setup-screen" class="setup-screen hidden">
     <div class="setup-card">
-      <h1>🛵 Controle Motofrete</h1>
+      <h1>
+        <span class="brand-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>
+        </span>
+        Controle Motofrete
+      </h1>
       <p class="muted">Primeira configuração: cole suas credenciais do JSONBin.io para começar.</p>
       <div class="field">
         <label for="setup-bin">Bin ID</label>
@@ -49,7 +55,12 @@
   <div id="app" class="app hidden">
     <header class="app-header">
       <div class="header-left">
-        <h1 class="brand">🛵 Motofrete</h1>
+        <h1 class="brand">
+          <span class="brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>
+          </span>
+          Motofrete
+        </h1>
       </div>
       <div class="header-right">
         <span id="sync-status" class="sync-status" title="Status de sincronização">
@@ -61,16 +72,16 @@
 
     <nav class="tabs" role="tablist">
       <button class="tab active" data-tab="lancamentos" role="tab">
-        <span class="tab-icon">📋</span><span class="tab-label">Lançamentos</span>
+        <span class="tab-icon" data-icon="list"></span><span class="tab-label">Lançamentos</span>
       </button>
       <button class="tab" data-tab="semanal" role="tab">
-        <span class="tab-icon">📅</span><span class="tab-label">Semanal</span>
+        <span class="tab-icon" data-icon="calendar"></span><span class="tab-label">Semanal</span>
       </button>
       <button class="tab" data-tab="mensal" role="tab">
-        <span class="tab-icon">📊</span><span class="tab-label">Mensal</span>
+        <span class="tab-icon" data-icon="chart"></span><span class="tab-label">Mensal</span>
       </button>
       <button class="tab" data-tab="config" role="tab">
-        <span class="tab-icon">⚙️</span><span class="tab-label">Config</span>
+        <span class="tab-icon" data-icon="settings"></span><span class="tab-label">Config</span>
       </button>
     </nav>
 
@@ -90,9 +101,9 @@
             </div>
           </div>
           <div class="btn-row">
-            <button class="btn btn-secondary btn-icon" data-export="excel:lancamentos" title="Exportar Excel">📊</button>
-            <button class="btn btn-secondary btn-icon" data-export="pdf:lancamentos" title="Exportar PDF">📄</button>
-            <button id="btn-novo" class="btn btn-primary">+ Novo</button>
+            <button class="btn btn-secondary btn-icon" data-export="excel:lancamentos" title="Exportar Excel" data-icon="fileXls"></button>
+            <button class="btn btn-secondary btn-icon" data-export="pdf:lancamentos" title="Exportar PDF" data-icon="filePdf"></button>
+            <button id="btn-novo" class="btn btn-primary"><span data-icon="plus"></span>Novo</button>
           </div>
         </div>
 
@@ -123,8 +134,8 @@
         <div class="toolbar">
           <h2 class="panel-title">Resumo Semanal</h2>
           <div class="btn-row">
-            <button class="btn btn-secondary btn-icon" data-export="excel:semanal" title="Exportar Excel">📊</button>
-            <button class="btn btn-secondary btn-icon" data-export="pdf:semanal" title="Exportar PDF">📄</button>
+            <button class="btn btn-secondary btn-icon" data-export="excel:semanal" title="Exportar Excel" data-icon="fileXls"></button>
+            <button class="btn btn-secondary btn-icon" data-export="pdf:semanal" title="Exportar PDF" data-icon="filePdf"></button>
           </div>
         </div>
         <div class="table-wrapper">
@@ -153,10 +164,10 @@
         <div class="toolbar">
           <h2 class="panel-title">Resumo Mensal</h2>
           <div class="btn-row">
-            <button class="btn btn-secondary btn-icon" data-export="excel:mensal" title="Exportar Excel">📊</button>
-            <button class="btn btn-secondary btn-icon" data-export="pdf:mensal" title="Exportar PDF">📄</button>
-            <button class="btn btn-secondary" data-export="excel:all" title="Excel completo">📊 Tudo</button>
-            <button class="btn btn-secondary" data-export="pdf:all" title="PDF completo">📄 Tudo</button>
+            <button class="btn btn-secondary btn-icon" data-export="excel:mensal" title="Exportar Excel" data-icon="fileXls"></button>
+            <button class="btn btn-secondary btn-icon" data-export="pdf:mensal" title="Exportar PDF" data-icon="filePdf"></button>
+            <button class="btn btn-secondary" data-export="excel:all" title="Excel completo"><span data-icon="fileXls"></span>Tudo</button>
+            <button class="btn btn-secondary" data-export="pdf:all" title="PDF completo"><span data-icon="filePdf"></span>Tudo</button>
           </div>
         </div>
         <div class="summary-cards" id="totais-gerais"></div>
@@ -239,12 +250,12 @@
           <div class="card">
             <h2>Backup</h2>
             <div class="btn-row">
-              <button id="cfg-exportar" class="btn btn-secondary">Exportar JSON</button>
-              <label class="btn btn-secondary" for="cfg-importar-file">Importar JSON</label>
+              <button id="cfg-exportar" class="btn btn-secondary"><span data-icon="download"></span>Exportar JSON</button>
+              <label class="btn btn-secondary" for="cfg-importar-file"><span data-icon="upload"></span>Importar JSON</label>
               <input type="file" id="cfg-importar-file" accept="application/json" hidden />
             </div>
             <hr />
-            <button id="cfg-instalar" class="btn btn-secondary">📱 Como instalar no celular</button>
+            <button id="cfg-instalar" class="btn btn-secondary"><span data-icon="smartphone"></span>Como instalar no celular</button>
             <hr />
             <button id="cfg-seed" class="btn btn-secondary">Carregar dados iniciais do Excel (238 lançamentos)</button>
             <p class="muted small">Substitui os lançamentos atuais pelos dados históricos.</p>
@@ -262,7 +273,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h2 id="modal-title">Novo lançamento</h2>
-        <button class="modal-close" data-close>&times;</button>
+        <button class="modal-close" data-close aria-label="Fechar" data-icon="x"></button>
       </div>
       <form id="form-lancamento" class="modal-body">
         <input type="hidden" id="f-id" />
@@ -323,9 +334,10 @@
 
   <div id="toast" class="toast hidden"></div>
 
-  <button id="fab-novo" class="fab" title="Novo lançamento" aria-label="Novo lançamento">+</button>
+  <button id="fab-novo" class="fab" title="Novo lançamento" aria-label="Novo lançamento" data-icon="plus"></button>
 
   <script src="js/credentials.js"></script>
+  <script src="js/icons.js"></script>
   <script src="js/seed-data.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/resumos.js"></script>

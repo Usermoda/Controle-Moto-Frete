@@ -53,6 +53,38 @@ html, body {
 .small { font-size: 13px; }
 .align-right { text-align: right; }
 
+/* ===== Icons ===== */
+.icon, .icon-sm, .tab-icon svg, .brand-icon svg,
+.fab svg, .btn svg, .modal-close svg, .row-actions svg,
+[data-icon] > svg {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.icon { width: 18px; height: 18px; }
+.icon-sm { width: 16px; height: 16px; }
+.tab-icon svg { width: 22px; height: 22px; }
+.brand-icon svg { width: 22px; height: 22px; }
+.brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.fab svg { width: 24px; height: 24px; }
+.btn > [data-icon] { display: inline-flex; }
+.btn > [data-icon] > svg { width: 16px; height: 16px; margin-right: 2px; }
+.btn-icon > svg,
+.btn-icon > [data-icon] > svg { width: 18px; height: 18px; margin: 0; }
+.modal-close > svg { width: 20px; height: 20px; }
+.row-actions svg { width: 16px; height: 16px; }
+
 /* ===== Setup screen ===== */
 .setup-screen {
   min-height: 100vh;
@@ -72,7 +104,12 @@ html, body {
   box-shadow: var(--shadow);
 }
 
-.setup-card h1 { margin: 0 0 8px; font-size: 22px; }
+.setup-card h1 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+}
 
 .setup-actions {
   display: flex;
@@ -128,6 +165,8 @@ html, body {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 
 .sync-status {
@@ -184,7 +223,8 @@ html, body {
   min-height: 44px;
   font-family: inherit;
 }
-.tab-icon { display: none; font-size: 20px; }
+.tab-icon { display: none; }
+.tab-icon svg { display: block; }
 .tab:hover { color: var(--text); }
 .tab.active {
   color: var(--primary);
@@ -344,13 +384,12 @@ input[type="password"], select {
   background: var(--primary);
   color: white;
   border: none;
-  font-size: 28px;
-  font-weight: 300;
-  line-height: 1;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   z-index: 20;
   transition: transform 0.15s;
+  align-items: center;
+  justify-content: center;
 }
 .fab:active { transform: scale(0.92); }
 
@@ -663,7 +702,7 @@ input[type="password"], select {
     border-bottom: none;
     border-top-color: var(--primary);
   }
-  .tab-icon { display: inline; font-size: 20px; }
+  .tab-icon { display: inline-flex; }
   .tab-label { font-size: 11px; }
 
   /* FAB visível */

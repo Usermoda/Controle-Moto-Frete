@@ -150,7 +150,16 @@ async function loadSeed() {
   toast(`${seedLancs.length} lançamentos carregados`, 'success');
 }
 
+function injectIcons() {
+  document.querySelectorAll('[data-icon]').forEach(el => {
+    const name = el.dataset.icon;
+    if (!name || el.querySelector('svg')) return;
+    el.insertAdjacentHTML('afterbegin', icon(name));
+  });
+}
+
 window.addEventListener('DOMContentLoaded', () => {
+  injectIcons();
   bindSyncStatus();
   bindSetup();
   bindTabs();

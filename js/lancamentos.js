@@ -158,8 +158,8 @@ function renderLancamentos() {
       <td class="align-right">${l.valorGuardado ? fmtBRL(l.valorGuardado) : '—'}</td>
       <td>
         <div class="row-actions">
-          <button class="edit" data-action="edit" data-id="${l.id}">✎</button>
-          <button class="delete" data-action="delete" data-id="${l.id}">🗑</button>
+          <button class="edit" data-action="edit" data-id="${l.id}" title="Editar">${icon('edit', 'icon-sm')}</button>
+          <button class="delete" data-action="delete" data-id="${l.id}" title="Excluir">${icon('trash', 'icon-sm')}</button>
         </div>
       </td>
     </tr>
