@@ -705,8 +705,8 @@ input[type="password"], select {
   .tab-icon { display: inline-flex; }
   .tab-label { font-size: 11px; }
 
-  /* FAB visível */
-  .fab { display: flex; align-items: center; justify-content: center; }
+  /* FAB só aparece na aba Lançamentos */
+  .fab.visible { display: flex; align-items: center; justify-content: center; }
 
   /* Botão + Novo escondido no toolbar mobile (usa FAB) */
   #btn-novo { display: none; }

@@ -98,14 +98,17 @@ function bindSyncStatus() {
 function bindTabs() {
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.tab-panel');
+  const $fab = document.getElementById('fab-novo');
   tabs.forEach(tab => {
     tab.onclick = () => {
       const name = tab.dataset.tab;
       state.currentTab = name;
       tabs.forEach(t => t.classList.toggle('active', t === tab));
       panels.forEach(p => p.classList.toggle('active', p.dataset.panel === name));
+      if ($fab) $fab.classList.toggle('visible', name === 'lancamentos');
     };
   });
+  if ($fab) $fab.classList.add('visible'); // aba padrão = lancamentos
 }
 
 function toast(message, type = 'info') {
