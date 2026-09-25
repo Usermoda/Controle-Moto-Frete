@@ -110,7 +110,7 @@ function populateSelect(el, options) {
   if (options.includes(current)) el.value = current;
 }
 
-function submitForm(e) {
+async function submitForm(e) {
   e.preventDefault();
   const id = $('#f-id').value;
   const data = $('#f-data').value;
@@ -132,14 +132,25 @@ function submitForm(e) {
     valorGuardado: parseFloat($('#f-guardado').value) || 0
   };
 
-  if (id) {
-    const idx = state.data.lancamentos.findIndex(l => l.id === id);
-    if (idx >= 0) state.data.lancamentos[idx] = lanc;
-  } else {
-    state.data.lancamentos.push(lanc);
+  const $submitBtn = $('#form-lancamento button[type="submit"]');
+  if ($submitBtn) { $submitBtn.disabled = true; $submitBtn.textContent = 'Sincronizando...'; }
+
+  try {
+    // Sync antes de salvar → garante que estamos aplicando mudança na versão mais recente
+    await syncAntesDeSalvar();
+
+    if (id) {
+      const idx = state.data.lancamentos.findIndex(l => l.id === id);
+      if (idx >= 0) state.data.lancamentos[idx] = lanc;
+      else state.data.lancamentos.push(lanc); // foi apagado remotamente; re-adiciona
+    } else {
+      state.data.lancamentos.push(lanc);
+    }
+    closeModal();
+    await saveImmediately();
+  } finally {
+    if ($submitBtn) { $submitBtn.disabled = false; $submitBtn.textContent = 'Salvar'; }
   }
-  closeModal();
-  markDirty();
 }
 
 function ordenarLancs(list) {
@@ -248,8 +259,11 @@ function initLancamentosUI() {
       openModal(lanc);
     } else if (btn.dataset.action === 'delete') {
       if (confirm('Excluir este lançamento?')) {
-        state.data.lancamentos = state.data.lancamentos.filter(l => l.id !== id);
-        markDirty();
+        (async () => {
+          await syncAntesDeSalvar();
+          state.data.lancamentos = state.data.lancamentos.filter(l => l.id !== id);
+          await saveImmediately();
+        })();
       }
     }
   });

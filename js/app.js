@@ -154,6 +154,26 @@ async function bootstrapApp() {
   reRenderAll();
 }
 
+// Sync silencioso antes de salvar — puxa remoto e mergeia com estado local
+// Retorna true se ok, false se falhou (nesse caso não bloqueamos o save)
+async function syncAntesDeSalvar() {
+  try {
+    setSyncStatus('saving', 'Sincronizando antes de salvar...');
+    const remote = await loadRemote();
+    // Substitui config e lancamentos pelos do remoto — o save posterior
+    // vai adicionar/editar/excluir em cima da versão mais recente
+    if (remote && Array.isArray(remote.lancamentos)) {
+      state.data.lancamentos = remote.lancamentos;
+      state.data.config = { ...DEFAULT_CONFIG, ...(remote.config || {}) };
+    }
+    return true;
+  } catch (err) {
+    setSyncStatus('error', 'Sync falhou');
+    toast('Sync falhou: ' + err.message + '. Salvando mesmo assim.', 'error');
+    return false;
+  }
+}
+
 // Sync manual — envia pendentes primeiro (se houver), depois baixa do JSONBin
 async function sincronizarDaNuvem() {
   const $btn = document.getElementById('header-sync');
