@@ -31,6 +31,36 @@ function stampFile(prefix) {
   return `${prefix}-${stamp}`;
 }
 
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+async function saveBlob(blob, filename) {
+  // iOS: prefere Web Share API (folha de compartilhamento nativa)
+  if (isIOS() && navigator.canShare) {
+    try {
+      const file = new File([blob], filename, { type: blob.type });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: filename });
+        return;
+      }
+    } catch (err) {
+      if (err.name === 'AbortError') return; // usuário cancelou
+      // fallback pra download tradicional
+    }
+  }
+  // Download tradicional
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 // ============ Coletores de dados ============
 function dadosLancamentos() {
   const list = [...state.data.lancamentos].sort((a, b) => (b.data || '').localeCompare(a.data || ''));
@@ -94,7 +124,10 @@ async function exportarExcel(tipo) {
       XLSX.utils.book_append_sheet(wb, ws, nome.slice(0, 31));
     });
 
-    XLSX.writeFile(wb, `${stampFile('motofrete')}.xlsx`);
+    const filename = `${stampFile('motofrete')}.xlsx`;
+    const arr = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([arr], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    await saveBlob(blob, filename);
     toast('Excel exportado', 'success');
   } catch (err) {
     toast('Erro ao exportar: ' + err.message, 'error');
@@ -152,7 +185,9 @@ async function exportarPDF(tipo) {
       });
     });
 
-    doc.save(`${stampFile('motofrete')}.pdf`);
+    const filename = `${stampFile('motofrete')}.pdf`;
+    const blob = doc.output('blob');
+    await saveBlob(blob, filename);
     toast('PDF exportado', 'success');
   } catch (err) {
     toast('Erro ao exportar: ' + err.message, 'error');

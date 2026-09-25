@@ -10,8 +10,10 @@
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛵</text></svg>" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛵</text></svg>" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Motofrete" />
+  <meta name="format-detection" content="telephone=no" />
 </head>
 <body>
   <div id="setup-screen" class="setup-screen hidden">
@@ -241,6 +243,8 @@
               <label class="btn btn-secondary" for="cfg-importar-file">Importar JSON</label>
               <input type="file" id="cfg-importar-file" accept="application/json" hidden />
             </div>
+            <hr />
+            <button id="cfg-instalar" class="btn btn-secondary">📱 Como instalar no celular</button>
             <hr />
             <button id="cfg-seed" class="btn btn-secondary">Carregar dados iniciais do Excel (238 lançamentos)</button>
             <p class="muted small">Substitui os lançamentos atuais pelos dados históricos.</p>

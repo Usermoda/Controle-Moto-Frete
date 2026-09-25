@@ -116,6 +116,9 @@ function initConfigUI() {
     }
   };
 
+  const $btnInstalar = document.querySelector('#cfg-instalar');
+  if ($btnInstalar) $btnInstalar.onclick = () => mostrarComoInstalar();
+
   document.querySelector('#cfg-limpar').onclick = async () => {
     if (!confirm('Apagar TODOS os lançamentos? Esta ação não pode ser desfeita.')) return;
     const c = prompt('Digite APAGAR para confirmar:');
@@ -124,4 +127,42 @@ function initConfigUI() {
     await saveImmediately();
     toast('Lançamentos apagados', 'success');
   };
+}
+
+function mostrarComoInstalar() {
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/.test(ua);
+  let msg;
+  if (isIOS) {
+    msg = `📱 INSTALAR NO IPHONE/IPAD:
+
+1. Abra este site no Safari (não funciona no Chrome iOS)
+2. Toque no botão Compartilhar 􀈂 (quadrado com seta pra cima)
+3. Role a lista e toque em "Adicionar à Tela de Início"
+4. Confirme o nome e toque em "Adicionar"
+
+O app abre em tela cheia, sem a barra do Safari.`;
+  } else if (isAndroid) {
+    msg = `📱 INSTALAR NO ANDROID:
+
+1. Abra este site no Chrome
+2. Toque nos 3 pontinhos ⋮ no canto superior direito
+3. Toque em "Instalar app" ou "Adicionar à tela inicial"
+4. Confirme
+
+O app abre em tela cheia, com ícone na home.`;
+  } else {
+    msg = `📱 INSTALAR NO CELULAR:
+
+iPhone/iPad:
+• Safari → Compartilhar → Adicionar à Tela de Início
+
+Android:
+• Chrome → Menu (⋮) → Instalar app
+
+No desktop:
+• Chrome → clique no ícone de instalação na barra de endereço`;
+  }
+  alert(msg);
 }
