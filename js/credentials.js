@@ -6,6 +6,6 @@ const CREDENTIALS = {
   binId: '6ab686afac6210605af481d0 ',
   masterKey: '$2a$10$2O7WSGtmzkGjIWgtdQzsqem/MRsheeqkSsSkuwhAYO7AjnVxNISlm',
   // Login do app — troque pra sua senha (barreira contra acesso casual, não segurança real)
-  loginUser: 'gabriel',
-  loginPass: 'motofrete123'
+  loginUser: 'lucas',
+  loginPass: 'lucas123'
 };
