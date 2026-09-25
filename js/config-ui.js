@@ -122,6 +122,11 @@ function initConfigUI() {
   const $btnSync = document.querySelector('#cfg-sincronizar');
   if ($btnSync) $btnSync.onclick = () => sincronizarDaNuvem();
 
+  const $btnLogout = document.querySelector('#cfg-logout');
+  if ($btnLogout) $btnLogout.onclick = () => {
+    if (confirm('Sair da conta? Você precisará entrar novamente.')) logout();
+  };
+
   document.querySelector('#cfg-limpar').onclick = async () => {
     if (!confirm('Apagar TODOS os lançamentos? Esta ação não pode ser desfeita.')) return;
     const c = prompt('Digite APAGAR para confirmar:');

@@ -203,6 +203,18 @@ function injectIcons() {
   });
 }
 
+function startAppAfterAuth() {
+  // Se tem credenciais hardcoded, salva no localStorage e loga direto no JSONBin
+  if (typeof CREDENTIALS !== 'undefined' && CREDENTIALS.binId && CREDENTIALS.masterKey) {
+    saveCreds(CREDENTIALS.binId, CREDENTIALS.masterKey);
+    bootstrapApp();
+    return;
+  }
+  const creds = getCreds();
+  if (!creds) showSetup();
+  else bootstrapApp();
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   injectIcons();
   bindSyncStatus();
@@ -211,22 +223,18 @@ window.addEventListener('DOMContentLoaded', () => {
   initLancamentosUI();
   initConfigUI();
   initExportUI();
+  initLoginUI();
   // FAB (mobile) — reusa handler do botão novo
   const $fab = document.getElementById('fab-novo');
   if ($fab) $fab.onclick = () => document.getElementById('btn-novo').click();
 
-  // Se tem credenciais hardcoded, salva no localStorage e loga direto
-  if (typeof CREDENTIALS !== 'undefined' && CREDENTIALS.binId && CREDENTIALS.masterKey) {
-    saveCreds(CREDENTIALS.binId, CREDENTIALS.masterKey);
-    bootstrapApp();
+  // Gate de auth
+  if (!isLoggedIn()) {
+    document.getElementById('login-screen').classList.remove('hidden');
+    setTimeout(() => document.getElementById('login-user').focus(), 100);
     return;
   }
-  const creds = getCreds();
-  if (!creds) {
-    showSetup();
-  } else {
-    bootstrapApp();
-  }
+  startAppAfterAuth();
 });
 
 window.addEventListener('beforeunload', () => {

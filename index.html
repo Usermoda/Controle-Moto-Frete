@@ -17,6 +17,30 @@
   <meta name="format-detection" content="telephone=no" />
 </head>
 <body>
+  <div id="login-screen" class="setup-screen hidden">
+    <div class="setup-card">
+      <h1>
+        <span class="brand-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>
+        </span>
+        Motofrete
+      </h1>
+      <p class="muted">Entre com suas credenciais para acessar.</p>
+      <form id="login-form">
+        <div class="field">
+          <label for="login-user">Usuário</label>
+          <input type="text" id="login-user" autocomplete="username" required />
+        </div>
+        <div class="field">
+          <label for="login-pass">Senha</label>
+          <input type="password" id="login-pass" autocomplete="current-password" required />
+        </div>
+        <button type="submit" id="login-btn" class="btn btn-primary" style="width:100%">Entrar</button>
+        <p id="login-error" class="setup-status err"></p>
+      </form>
+    </div>
+  </div>
+
   <div id="setup-screen" class="setup-screen hidden">
     <div class="setup-card">
       <h1>
@@ -264,6 +288,8 @@
             <p class="muted small">Substitui os lançamentos atuais pelos dados históricos.</p>
             <hr />
             <button id="cfg-limpar" class="btn btn-danger">Apagar todos os lançamentos</button>
+            <hr />
+            <button id="cfg-logout" class="btn btn-secondary">Sair (logout)</button>
           </div>
         </div>
       </section>
@@ -340,6 +366,7 @@
   <button id="fab-novo" class="fab" title="Novo lançamento" aria-label="Novo lançamento" data-icon="plus"></button>
 
   <script src="js/credentials.js?v=3"></script>
+  <script src="js/auth.js?v=3"></script>
   <script src="js/icons.js?v=3"></script>
   <script src="js/seed-data.js?v=3"></script>
   <script src="js/storage.js?v=3"></script>
