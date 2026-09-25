@@ -6,10 +6,20 @@ function isLoggedIn() {
 }
 
 function tryLogin(user, pass) {
-  if (typeof CREDENTIALS === 'undefined') return false;
-  const ok = user.trim() === CREDENTIALS.loginUser && pass === CREDENTIALS.loginPass;
+  if (typeof CREDENTIALS === 'undefined') {
+    console.error('CREDENTIALS não carregou');
+    return { ok: false, reason: 'Config não carregou (limpe o cache e recarregue)' };
+  }
+  const expectedUser = String(CREDENTIALS.loginUser || '').trim().toLowerCase();
+  const expectedPass = String(CREDENTIALS.loginPass || '').trim();
+  const typedUser = String(user || '').trim().toLowerCase();
+  const typedPass = String(pass || '').trim();
+  if (!expectedUser || !expectedPass) {
+    return { ok: false, reason: 'Login não configurado no credentials.js' };
+  }
+  const ok = typedUser === expectedUser && typedPass === expectedPass;
   if (ok) localStorage.setItem(LS_AUTH, '1');
-  return ok;
+  return { ok, reason: ok ? '' : 'Usuário ou senha inválidos' };
 }
 
 function logout() {
@@ -27,12 +37,12 @@ function initLoginUI() {
 
   const submit = (e) => {
     if (e) e.preventDefault();
-    if (tryLogin($user.value, $pass.value)) {
+    const result = tryLogin($user.value, $pass.value);
+    if (result.ok) {
       $screen.classList.add('hidden');
-      // Continua fluxo normal do app
       startAppAfterAuth();
     } else {
-      $err.textContent = 'Usuário ou senha inválidos';
+      $err.textContent = result.reason;
       $pass.value = '';
       $pass.focus();
     }
