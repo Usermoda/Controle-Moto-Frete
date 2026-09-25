@@ -69,27 +69,33 @@ function aplicarRegrasCategoria() {
 
   const isFolga = cat === 'Folga';
   const $valor = $('#f-valor'), $app = $('#f-app'), $km = $('#f-km'),
-        $desc = $('#f-descricao'), $guardado = $('#f-guardado'), $ref = $('#f-referencia');
+        $desc = $('#f-descricao'), $guardado = $('#f-guardado');
+
+  // Esconde/mostra os .field containers para deixar o form limpo
+  const setHidden = (input, hidden) => {
+    const field = input.closest('.field');
+    if (field) field.classList.toggle('hidden', hidden);
+    input.required = !hidden && input.hasAttribute('data-required');
+  };
+  // Marca campos que originalmente são required (uma vez)
+  if (!$valor.hasAttribute('data-required') && $valor.required) $valor.setAttribute('data-required', '1');
+
+  setHidden($valor, isFolga);
+  setHidden($app, isFolga);
+  setHidden($km, isFolga);
+  setHidden($guardado, isFolga);
 
   if (isFolga) {
-    $valor.value = 0;         $valor.disabled = true;
-    $app.value = '';          $app.disabled = true;
-    $km.value = '';           $km.disabled = true;
-    $guardado.value = 0;      $guardado.disabled = true;
+    $valor.value = 0;
+    $app.value = '';
+    $km.value = '';
+    $guardado.value = 0;
     $desc.value = 'Dia de folga';
-    $ref.value = 'Diario';
-  } else {
-    $valor.disabled = false;
-    $app.disabled = false;
-    $km.disabled = false;
-    $guardado.disabled = false;
-    // Descrição padrão só se tá vazia ou era "Dia de folga"
-    if (!$desc.value || $desc.value === 'Dia de folga') {
-      $desc.value = tipoSugerido === 'Receita' ? 'Faturamento do dia' :
-                    cat === 'Combustivel' ? 'Abastecimento' :
-                    cat === 'Manutencao' ? 'Manutenção da moto' :
-                    cat === 'Alimentacao' ? 'Alimentação' : '';
-    }
+  } else if (!$desc.value || $desc.value === 'Dia de folga') {
+    $desc.value = tipoSugerido === 'Receita' ? 'Faturamento do dia' :
+                  cat === 'Combustivel' ? 'Abastecimento' :
+                  cat === 'Manutencao' ? 'Manutenção da moto' :
+                  cat === 'Alimentacao' ? 'Alimentação' : '';
   }
 }
 
