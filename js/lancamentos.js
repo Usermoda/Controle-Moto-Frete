@@ -187,9 +187,9 @@ function renderLancamentos() {
       opts.map(o => `<option value="${o}">${o}</option>`).join('');
     if (opts.includes(current)) el.value = current;
   };
-  rebuild($mes, 'Todos os meses', mesesUnicos, $mes.value);
-  rebuild($cat, 'Todas categorias', catsUnicas, $cat.value);
-  rebuild($app, 'Todos os apps', appsUnicos, $app.value);
+  rebuild($mes, 'Mês', mesesUnicos, $mes.value);
+  rebuild($cat, 'Categoria', catsUnicas, $cat.value);
+  rebuild($app, 'App', appsUnicos, $app.value);
 
   let list = state.data.lancamentos.filter(l => {
     if (filters.mes && l.mes !== filters.mes) return false;

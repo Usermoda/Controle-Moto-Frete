@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0f172a" />
   <title>Controle Motofrete</title>
-  <link rel="stylesheet" href="styles.css?v=14" />
+  <link rel="stylesheet" href="styles.css?v=15" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="apple-touch-icon" href="favicon.svg" />
@@ -116,13 +116,13 @@
         <div class="toolbar">
           <div class="filters">
             <select id="filter-mes" class="input">
-              <option value="">Todos os meses</option>
+              <option value="">Mês</option>
             </select>
             <select id="filter-categoria" class="input">
-              <option value="">Todas categorias</option>
+              <option value="">Categoria</option>
             </select>
             <select id="filter-app" class="input">
-              <option value="">Todos os apps</option>
+              <option value="">App</option>
             </select>
             <div class="chips" id="filter-tipo">
               <button class="chip active" data-tipo="">Todos</button>
@@ -135,7 +135,7 @@
           <div class="btn-row">
             <div class="dropdown">
               <button class="btn btn-secondary" data-dropdown="menu-export-lanc" aria-haspopup="true">
-                <span data-icon="download"></span>Exportar<span data-icon="chevronDown" class="chev"></span>
+                <span data-icon="download"></span><span class="btn-text-md">Exportar</span><span data-icon="chevronDown" class="chev"></span>
               </button>
               <div class="dropdown-menu" id="menu-export-lanc" role="menu">
                 <button data-export="excel:lancamentos" role="menuitem"><span data-icon="fileXls"></span>Excel</button>
@@ -175,7 +175,7 @@
           <div class="btn-row">
             <div class="dropdown">
               <button class="btn btn-secondary" data-dropdown="menu-export-sem" aria-haspopup="true">
-                <span data-icon="download"></span>Exportar<span data-icon="chevronDown" class="chev"></span>
+                <span data-icon="download"></span><span class="btn-text-md">Exportar</span><span data-icon="chevronDown" class="chev"></span>
               </button>
               <div class="dropdown-menu" id="menu-export-sem" role="menu">
                 <button data-export="excel:semanal" role="menuitem"><span data-icon="fileXls"></span>Excel</button>
@@ -212,7 +212,7 @@
           <div class="btn-row">
             <div class="dropdown">
               <button class="btn btn-secondary" data-dropdown="menu-export-men" aria-haspopup="true">
-                <span data-icon="download"></span>Exportar<span data-icon="chevronDown" class="chev"></span>
+                <span data-icon="download"></span><span class="btn-text-md">Exportar</span><span data-icon="chevronDown" class="chev"></span>
               </button>
               <div class="dropdown-menu" id="menu-export-men" role="menu">
                 <button data-export="excel:mensal" role="menuitem"><span data-icon="fileXls"></span>Excel — resumo mensal</button>
@@ -395,16 +395,16 @@
 
   <button id="fab-novo" class="fab" title="Novo lançamento" aria-label="Novo lançamento" data-icon="plus"></button>
 
-  <script src="js/credentials.js?v=14"></script>
-  <script src="js/auth.js?v=14"></script>
-  <script src="js/icons.js?v=14"></script>
-  <script src="js/seed-data.js?v=14"></script>
-  <script src="js/storage.js?v=14"></script>
-  <script src="js/resumos.js?v=14"></script>
-  <script src="js/resumos-ui.js?v=14"></script>
-  <script src="js/lancamentos.js?v=14"></script>
-  <script src="js/config-ui.js?v=14"></script>
-  <script src="js/export.js?v=14"></script>
-  <script src="js/app.js?v=14"></script>
+  <script src="js/credentials.js?v=15"></script>
+  <script src="js/auth.js?v=15"></script>
+  <script src="js/icons.js?v=15"></script>
+  <script src="js/seed-data.js?v=15"></script>
+  <script src="js/storage.js?v=15"></script>
+  <script src="js/resumos.js?v=15"></script>
+  <script src="js/resumos-ui.js?v=15"></script>
+  <script src="js/lancamentos.js?v=15"></script>
+  <script src="js/config-ui.js?v=15"></script>
+  <script src="js/export.js?v=15"></script>
+  <script src="js/app.js?v=15"></script>
 </body>
 </html>

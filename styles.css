@@ -813,6 +813,12 @@ input[type="password"], select {
     justify-content: flex-end;
   }
 
+  /* Esconde texto "Exportar" no mobile — fica só ícone + chevron */
+  .btn-text-md { display: none; }
+
+  /* Botão X limpar mais compacto no mobile */
+  #filter-limpar { min-width: 40px; width: 40px; height: 40px; padding: 0; }
+
   /* Toolbar da aba Lançamentos: grid compacto (sem buracos) */
   .toolbar:has(.filters) {
     display: grid;
