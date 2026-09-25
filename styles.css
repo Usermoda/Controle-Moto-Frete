@@ -14,6 +14,12 @@
   --radius: 10px;
   --radius-sm: 6px;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --nav-h: 56px;
+  --tabbar-h: 60px;
 }
 
 @media (prefers-color-scheme: light) {
@@ -28,9 +34,7 @@
   }
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 html, body {
   margin: 0;
@@ -41,6 +45,7 @@ html, body {
   font-size: 15px;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
 }
 
 .hidden { display: none !important; }
@@ -51,9 +56,10 @@ html, body {
 /* ===== Setup screen ===== */
 .setup-screen {
   min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: max(24px, var(--sat)) max(24px, var(--sar)) max(24px, var(--sab)) max(24px, var(--sal));
 }
 
 .setup-card {
@@ -87,7 +93,7 @@ html, body {
   font-size: 14px;
   color: var(--text-muted);
 }
-.setup-help summary { cursor: pointer; padding: 6px 0; }
+.setup-help summary { cursor: pointer; padding: 6px 0; min-height: 44px; display: flex; align-items: center; }
 .setup-help ol { padding-left: 20px; }
 .setup-help code {
   background: var(--bg-elev-2);
@@ -100,6 +106,7 @@ html, body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .app-header {
@@ -107,6 +114,9 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
+  padding-top: max(12px, var(--sat));
+  padding-left: max(16px, var(--sal));
+  padding-right: max(16px, var(--sar));
   background: var(--bg-elev);
   border-bottom: 1px solid var(--border);
   position: sticky;
@@ -143,17 +153,19 @@ html, body {
   50% { opacity: 0.4; }
 }
 
-/* ===== Tabs ===== */
+/* ===== Tabs (topo desktop, inferior mobile) ===== */
 .tabs {
   display: flex;
   background: var(--bg-elev);
   border-bottom: 1px solid var(--border);
-  overflow-x: auto;
   padding: 0 8px;
   position: sticky;
   top: 49px;
   z-index: 9;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+.tabs::-webkit-scrollbar { display: none; }
 
 .tab {
   background: none;
@@ -166,7 +178,13 @@ html, body {
   border-bottom: 2px solid transparent;
   white-space: nowrap;
   transition: color 0.15s, border-color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-family: inherit;
 }
+.tab-icon { display: none; font-size: 20px; }
 .tab:hover { color: var(--text); }
 .tab.active {
   color: var(--primary);
@@ -177,6 +195,8 @@ html, body {
 .content {
   flex: 1;
   padding: 16px;
+  padding-left: max(16px, var(--sal));
+  padding-right: max(16px, var(--sar));
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
@@ -184,6 +204,8 @@ html, body {
 
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
+
+.panel-title { margin: 0; font-size: 18px; font-weight: 600; }
 
 /* ===== Toolbar / filters ===== */
 .toolbar {
@@ -215,11 +237,13 @@ html, body {
   background: none;
   border: none;
   color: var(--text-muted);
-  padding: 6px 12px;
+  padding: 8px 12px;
   font-size: 13px;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
+  min-height: 36px;
+  font-family: inherit;
 }
 .chip:hover { color: var(--text); }
 .chip.active {
@@ -247,10 +271,11 @@ input[type="password"], select {
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 9px 12px;
-  font-size: 14px;
+  padding: 10px 12px;
+  font-size: 16px; /* evita zoom no iOS ao focar */
   font-family: inherit;
   width: 100%;
+  min-height: 44px;
 }
 .input:focus, input:focus, select:focus {
   outline: none;
@@ -264,7 +289,7 @@ input[type="password"], select {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 9px 16px;
+  padding: 10px 16px;
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
   font-size: 14px;
@@ -272,6 +297,7 @@ input[type="password"], select {
   cursor: pointer;
   transition: all 0.15s;
   font-family: inherit;
+  min-height: 44px;
 }
 
 .btn-primary {
@@ -294,11 +320,39 @@ input[type="password"], select {
 }
 .btn-danger:hover { background: var(--danger); color: white; }
 
+.btn-icon {
+  padding: 10px 12px;
+  min-width: 44px;
+  font-size: 18px;
+}
+
 .btn-row {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
+
+/* ===== FAB (mobile only) ===== */
+.fab {
+  display: none;
+  position: fixed;
+  right: max(16px, var(--sar));
+  bottom: calc(var(--tabbar-h) + max(16px, var(--sab)));
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 20;
+  transition: transform 0.15s;
+}
+.fab:active { transform: scale(0.92); }
 
 /* ===== Summary cards ===== */
 .summary-cards {
@@ -336,6 +390,7 @@ input[type="password"], select {
   border-radius: var(--radius);
   overflow: hidden;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .table {
@@ -359,6 +414,7 @@ input[type="password"], select {
   color: var(--text-muted);
   position: sticky;
   top: 0;
+  white-space: nowrap;
 }
 
 .table tr:last-child td { border-bottom: none; }
@@ -392,9 +448,11 @@ input[type="password"], select {
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 8px 10px;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 15px;
+  min-width: 36px;
+  min-height: 36px;
 }
 .row-actions button:hover { background: var(--bg-elev-2); color: var(--text); }
 .row-actions .delete:hover { color: var(--danger); }
@@ -442,17 +500,19 @@ input[type="password"], select {
   background: var(--bg-elev-2);
   border: 1px solid var(--border);
   border-radius: 20px;
-  padding: 4px 12px;
+  padding: 6px 12px;
   font-size: 13px;
+  min-height: 32px;
 }
 .tag button {
   background: none;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1;
-  padding: 0;
+  padding: 0 4px;
+  min-height: 24px;
 }
 .tag button:hover { color: var(--danger); }
 
@@ -471,6 +531,8 @@ input[type="password"], select {
   align-items: center;
   justify-content: center;
   padding: 16px;
+  padding-top: max(16px, var(--sat));
+  padding-bottom: max(16px, var(--sab));
 }
 
 .modal-backdrop {
@@ -487,8 +549,10 @@ input[type="password"], select {
   max-width: 640px;
   width: 100%;
   max-height: 90vh;
+  max-height: 90dvh;
   overflow: auto;
   box-shadow: var(--shadow);
+  -webkit-overflow-scrolling: touch;
 }
 
 .modal-header {
@@ -497,15 +561,21 @@ input[type="password"], select {
   justify-content: space-between;
   padding: 16px 20px;
   border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--bg-elev);
+  z-index: 1;
 }
 .modal-header h2 { margin: 0; font-size: 18px; }
 .modal-close {
   background: none;
   border: none;
   color: var(--text-muted);
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
   line-height: 1;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .modal-body {
@@ -526,12 +596,15 @@ input[type="password"], select {
   padding-top: 16px;
   border-top: 1px solid var(--border);
   margin-top: 16px;
+  position: sticky;
+  bottom: 0;
+  background: var(--bg-elev);
 }
 
 /* ===== Toast ===== */
 .toast {
   position: fixed;
-  bottom: 20px;
+  bottom: calc(var(--tabbar-h) + 20px + var(--sab));
   left: 50%;
   transform: translateX(-50%);
   background: var(--bg-elev);
@@ -541,6 +614,7 @@ input[type="password"], select {
   box-shadow: var(--shadow);
   z-index: 200;
   animation: slide-up 0.2s ease;
+  max-width: calc(100vw - 32px);
 }
 .toast.error { border-color: var(--danger); color: var(--danger); }
 .toast.success { border-color: var(--success); color: var(--success); }
@@ -550,14 +624,135 @@ input[type="password"], select {
   to { transform: translate(-50%, 0); opacity: 1; }
 }
 
-/* ===== Mobile ===== */
-@media (max-width: 640px) {
-  .content { padding: 12px; }
-  .form-grid { grid-template-columns: 1fr; }
-  .toolbar { flex-direction: column; align-items: stretch; }
-  .toolbar .btn { width: 100%; }
-  .filters { justify-content: space-between; }
-  .tabs { top: 49px; }
-  .table th, .table td { padding: 8px 6px; font-size: 13px; }
+/* ===== Mobile: bottom nav + FAB + card layout ===== */
+@media (max-width: 768px) {
+  .content {
+    padding: 12px;
+    padding-left: max(12px, var(--sal));
+    padding-right: max(12px, var(--sar));
+    padding-bottom: calc(var(--tabbar-h) + 16px + var(--sab));
+  }
+
+  /* Nav vira inferior */
+  .tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    padding: 0;
+    padding-bottom: var(--sab);
+    border-top: 1px solid var(--border);
+    border-bottom: none;
+    background: var(--bg-elev);
+    justify-content: space-around;
+    z-index: 15;
+    height: calc(var(--tabbar-h) + var(--sab));
+  }
+  .tab {
+    flex: 1;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 4px;
+    font-size: 11px;
+    border-bottom: none;
+    border-top: 2px solid transparent;
+    min-height: var(--tabbar-h);
+  }
+  .tab.active {
+    border-bottom: none;
+    border-top-color: var(--primary);
+  }
+  .tab-icon { display: inline; font-size: 20px; }
+  .tab-label { font-size: 11px; }
+
+  /* FAB visível */
+  .fab { display: flex; align-items: center; justify-content: center; }
+
+  /* Botão + Novo escondido no toolbar mobile (usa FAB) */
+  #btn-novo { display: none; }
+
+  /* Header menor */
+  .app-header { padding: 10px 12px; padding-top: max(10px, var(--sat)); }
   .brand { font-size: 16px; }
+
+  /* Toolbar mais compacto */
+  .toolbar { gap: 8px; }
+  .filters { width: 100%; }
+  .filters .input { flex: 1; min-width: 0; }
+
+  /* Cards de resumo em duas colunas */
+  .summary-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .summary-card { padding: 10px 12px; }
+  .summary-card .value { font-size: 18px; }
+
+  /* Modal fullscreen mobile */
+  .modal { padding: 0; }
+  .modal-content {
+    max-height: 100vh;
+    max-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 0;
+    max-width: 100%;
+  }
+  .form-grid { grid-template-columns: 1fr; }
+  .modal-footer .btn { flex: 1; }
+}
+
+/* ===== Layout de card para tabela de lançamentos em telas muito estreitas ===== */
+@media (max-width: 540px) {
+  #tabela-lancamentos { display: block; }
+  #tabela-lancamentos thead { display: none; }
+  #tabela-lancamentos tbody, #tabela-lancamentos tr, #tabela-lancamentos td { display: block; }
+  #tabela-lancamentos tr {
+    padding: 12px;
+    margin: 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "date badge actions"
+      "cat  cat   value"
+      "app  app   guardado";
+    gap: 4px 12px;
+    align-items: center;
+  }
+  #tabela-lancamentos tr:hover { background: transparent; }
+  #tabela-lancamentos td { padding: 0; border: none; font-size: 14px; }
+  #tabela-lancamentos td:nth-child(1) { grid-area: date; font-weight: 600; }
+  #tabela-lancamentos td:nth-child(2) { display: none; }
+  #tabela-lancamentos td:nth-child(3) {
+    grid-area: app;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  #tabela-lancamentos td:nth-child(4) { grid-area: badge; }
+  #tabela-lancamentos td:nth-child(5) {
+    grid-area: cat;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  #tabela-lancamentos td:nth-child(6) {
+    grid-area: value;
+    text-align: right;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  #tabela-lancamentos td:nth-child(7) {
+    grid-area: guardado;
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  #tabela-lancamentos td:nth-child(8) { grid-area: actions; }
+
+  /* Tabelas de resumo em card também */
+  #tabela-semanal, #tabela-mensal { font-size: 12px; }
+  #tabela-semanal th, #tabela-semanal td,
+  #tabela-mensal th, #tabela-mensal td { padding: 6px 6px; }
 }

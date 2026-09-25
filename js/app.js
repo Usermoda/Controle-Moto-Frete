@@ -156,6 +156,10 @@ window.addEventListener('DOMContentLoaded', () => {
   bindTabs();
   initLancamentosUI();
   initConfigUI();
+  initExportUI();
+  // FAB (mobile) — reusa handler do botão novo
+  const $fab = document.getElementById('fab-novo');
+  if ($fab) $fab.onclick = () => document.getElementById('btn-novo').click();
 
   // Se tem credenciais hardcoded, salva no localStorage e loga direto
   if (typeof CREDENTIALS !== 'undefined' && CREDENTIALS.binId && CREDENTIALS.masterKey) {

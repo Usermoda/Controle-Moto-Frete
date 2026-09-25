@@ -6,7 +6,12 @@
   <meta name="theme-color" content="#0f172a" />
   <title>Controle Motofrete</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛵</text></svg>" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛵</text></svg>" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Motofrete" />
 </head>
 <body>
   <div id="setup-screen" class="setup-screen hidden">
@@ -53,10 +58,18 @@
     </header>
 
     <nav class="tabs" role="tablist">
-      <button class="tab active" data-tab="lancamentos" role="tab">Lançamentos</button>
-      <button class="tab" data-tab="semanal" role="tab">Semanal</button>
-      <button class="tab" data-tab="mensal" role="tab">Mensal</button>
-      <button class="tab" data-tab="config" role="tab">Config</button>
+      <button class="tab active" data-tab="lancamentos" role="tab">
+        <span class="tab-icon">📋</span><span class="tab-label">Lançamentos</span>
+      </button>
+      <button class="tab" data-tab="semanal" role="tab">
+        <span class="tab-icon">📅</span><span class="tab-label">Semanal</span>
+      </button>
+      <button class="tab" data-tab="mensal" role="tab">
+        <span class="tab-icon">📊</span><span class="tab-label">Mensal</span>
+      </button>
+      <button class="tab" data-tab="config" role="tab">
+        <span class="tab-icon">⚙️</span><span class="tab-label">Config</span>
+      </button>
     </nav>
 
     <main class="content">
@@ -74,7 +87,11 @@
               <button class="chip" data-tipo="Controle">Controle</button>
             </div>
           </div>
-          <button id="btn-novo" class="btn btn-primary">+ Novo</button>
+          <div class="btn-row">
+            <button class="btn btn-secondary btn-icon" data-export="excel:lancamentos" title="Exportar Excel">📊</button>
+            <button class="btn btn-secondary btn-icon" data-export="pdf:lancamentos" title="Exportar PDF">📄</button>
+            <button id="btn-novo" class="btn btn-primary">+ Novo</button>
+          </div>
         </div>
 
         <div class="summary-cards" id="quick-summary"></div>
@@ -101,6 +118,13 @@
 
       <!-- Semanal -->
       <section class="tab-panel" data-panel="semanal">
+        <div class="toolbar">
+          <h2 class="panel-title">Resumo Semanal</h2>
+          <div class="btn-row">
+            <button class="btn btn-secondary btn-icon" data-export="excel:semanal" title="Exportar Excel">📊</button>
+            <button class="btn btn-secondary btn-icon" data-export="pdf:semanal" title="Exportar PDF">📄</button>
+          </div>
+        </div>
         <div class="table-wrapper">
           <table class="table table-compact" id="tabela-semanal">
             <thead>
@@ -124,6 +148,15 @@
 
       <!-- Mensal -->
       <section class="tab-panel" data-panel="mensal">
+        <div class="toolbar">
+          <h2 class="panel-title">Resumo Mensal</h2>
+          <div class="btn-row">
+            <button class="btn btn-secondary btn-icon" data-export="excel:mensal" title="Exportar Excel">📊</button>
+            <button class="btn btn-secondary btn-icon" data-export="pdf:mensal" title="Exportar PDF">📄</button>
+            <button class="btn btn-secondary" data-export="excel:all" title="Excel completo">📊 Tudo</button>
+            <button class="btn btn-secondary" data-export="pdf:all" title="PDF completo">📄 Tudo</button>
+          </div>
+        </div>
         <div class="summary-cards" id="totais-gerais"></div>
         <div class="table-wrapper">
           <table class="table" id="tabela-mensal">
@@ -286,6 +319,8 @@
 
   <div id="toast" class="toast hidden"></div>
 
+  <button id="fab-novo" class="fab" title="Novo lançamento" aria-label="Novo lançamento">+</button>
+
   <script src="js/credentials.js"></script>
   <script src="js/seed-data.js"></script>
   <script src="js/storage.js"></script>
@@ -293,6 +328,7 @@
   <script src="js/resumos-ui.js"></script>
   <script src="js/lancamentos.js"></script>
   <script src="js/config-ui.js"></script>
+  <script src="js/export.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
