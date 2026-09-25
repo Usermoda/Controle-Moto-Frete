@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Controle Motofrete</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛵</text></svg>" />
+</head>
+<body>
+  <div id="setup-screen" class="setup-screen hidden">
+    <div class="setup-card">
+      <h1>🛵 Controle Motofrete</h1>
+      <p class="muted">Primeira configuração: cole suas credenciais do JSONBin.io para começar.</p>
+      <div class="field">
+        <label for="setup-bin">Bin ID</label>
+        <input type="text" id="setup-bin" placeholder="ex: 65f1a2b3c4d5e6f7g8h9i0j1" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="setup-key">Master Key (X-Master-Key)</label>
+        <input type="password" id="setup-key" placeholder="$2b$10$..." autocomplete="off" />
+      </div>
+      <div class="setup-actions">
+        <button id="setup-test" class="btn btn-secondary">Testar conexão</button>
+        <button id="setup-save" class="btn btn-primary">Salvar e entrar</button>
+      </div>
+      <p id="setup-status" class="setup-status"></p>
+      <details class="setup-help">
+        <summary>Como obter Bin ID e Master Key?</summary>
+        <ol>
+          <li>Crie conta grátis em <a href="https://jsonbin.io" target="_blank" rel="noopener">jsonbin.io</a></li>
+          <li>No painel, clique em <strong>API Keys</strong> → copie sua <strong>X-MASTER-KEY</strong></li>
+          <li>Clique em <strong>Create Bin</strong> → cole <code>{}</code> como conteúdo → clique em Create</li>
+          <li>Copie o <strong>Bin ID</strong> que aparece na URL (após <code>/b/</code>)</li>
+          <li>Cole os dois campos acima e clique em Testar conexão</li>
+        </ol>
+      </details>
+    </div>
+  </div>
+
+  <div id="app" class="app hidden">
+    <header class="app-header">
+      <div class="header-left">
+        <h1 class="brand">🛵 Motofrete</h1>
+      </div>
+      <div class="header-right">
+        <span id="sync-status" class="sync-status" title="Status de sincronização">
+          <span class="sync-dot"></span>
+          <span class="sync-label">Salvo</span>
+        </span>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="lancamentos" role="tab">Lançamentos</button>
+      <button class="tab" data-tab="semanal" role="tab">Semanal</button>
+      <button class="tab" data-tab="mensal" role="tab">Mensal</button>
+      <button class="tab" data-tab="config" role="tab">Config</button>
+    </nav>
+
+    <main class="content">
+      <!-- Lançamentos -->
+      <section class="tab-panel active" data-panel="lancamentos">
+        <div class="toolbar">
+          <div class="filters">
+            <select id="filter-mes" class="input">
+              <option value="">Todos os meses</option>
+            </select>
+            <div class="chips" id="filter-tipo">
+              <button class="chip active" data-tipo="">Todos</button>
+              <button class="chip" data-tipo="Receita">Receita</button>
+              <button class="chip" data-tipo="Despesa">Despesa</button>
+              <button class="chip" data-tipo="Controle">Controle</button>
+            </div>
+          </div>
+          <button id="btn-novo" class="btn btn-primary">+ Novo</button>
+        </div>
+
+        <div class="summary-cards" id="quick-summary"></div>
+
+        <div class="table-wrapper">
+          <table class="table" id="tabela-lancamentos">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Dia</th>
+                <th>App</th>
+                <th>Tipo</th>
+                <th>Categoria</th>
+                <th class="align-right">Valor</th>
+                <th class="align-right">Guardado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <p class="empty-state hidden" id="empty-lancamentos">Nenhum lançamento neste filtro.</p>
+        </div>
+      </section>
+
+      <!-- Semanal -->
+      <section class="tab-panel" data-panel="semanal">
+        <div class="table-wrapper">
+          <table class="table table-compact" id="tabela-semanal">
+            <thead>
+              <tr>
+                <th>Mês</th>
+                <th>Semana</th>
+                <th class="align-right">Receita</th>
+                <th class="align-right">Combustível</th>
+                <th class="align-right">Manutenção</th>
+                <th class="align-right">Outras</th>
+                <th class="align-right">Despesas</th>
+                <th class="align-right">Líquido</th>
+                <th class="align-right">Guardado</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Mensal -->
+      <section class="tab-panel" data-panel="mensal">
+        <div class="summary-cards" id="totais-gerais"></div>
+        <div class="table-wrapper">
+          <table class="table" id="tabela-mensal">
+            <thead>
+              <tr>
+                <th>Mês</th>
+                <th class="align-right">Receita</th>
+                <th class="align-right">Despesa</th>
+                <th class="align-right">Líquido</th>
+                <th class="align-right">Dias c/ fat.</th>
+                <th class="align-right">Média/lanç.</th>
+                <th class="align-right">Guardado</th>
+                <th>Status Reserva</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Configurações -->
+      <section class="tab-panel" data-panel="config">
+        <div class="config-grid">
+          <div class="card">
+            <h2>Metas</h2>
+            <div class="field">
+              <label for="cfg-meta-semanal">Meta semanal (R$)</label>
+              <input type="number" id="cfg-meta-semanal" step="10" />
+            </div>
+            <div class="field">
+              <label for="cfg-meta-minima">Meta mínima (R$)</label>
+              <input type="number" id="cfg-meta-minima" step="10" />
+            </div>
+            <div class="field">
+              <label for="cfg-meta-reserva">Meta diária de reserva (R$)</label>
+              <input type="number" id="cfg-meta-reserva" step="1" />
+            </div>
+            <button id="cfg-salvar-metas" class="btn btn-primary">Salvar metas</button>
+          </div>
+
+          <div class="card">
+            <h2>Listas</h2>
+            <div class="field">
+              <label>Apps</label>
+              <div class="tag-list" id="cfg-apps"></div>
+              <div class="inline-form">
+                <input type="text" id="cfg-app-novo" placeholder="Novo app" />
+                <button class="btn btn-secondary" data-add="apps">Adicionar</button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Categorias</label>
+              <div class="tag-list" id="cfg-categorias"></div>
+              <div class="inline-form">
+                <input type="text" id="cfg-categoria-novo" placeholder="Nova categoria" />
+                <button class="btn btn-secondary" data-add="categorias">Adicionar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Conexão JSONBin</h2>
+            <div class="field">
+              <label for="cfg-bin">Bin ID</label>
+              <input type="text" id="cfg-bin" />
+            </div>
+            <div class="field">
+              <label for="cfg-key">Master Key</label>
+              <input type="password" id="cfg-key" />
+            </div>
+            <div class="btn-row">
+              <button id="cfg-testar" class="btn btn-secondary">Testar</button>
+              <button id="cfg-salvar-conexao" class="btn btn-primary">Salvar</button>
+            </div>
+            <p id="cfg-conexao-status" class="muted small"></p>
+          </div>
+
+          <div class="card">
+            <h2>Backup</h2>
+            <div class="btn-row">
+              <button id="cfg-exportar" class="btn btn-secondary">Exportar JSON</button>
+              <label class="btn btn-secondary" for="cfg-importar-file">Importar JSON</label>
+              <input type="file" id="cfg-importar-file" accept="application/json" hidden />
+            </div>
+            <hr />
+            <button id="cfg-seed" class="btn btn-secondary">Carregar dados iniciais do Excel (238 lançamentos)</button>
+            <p class="muted small">Substitui os lançamentos atuais pelos dados históricos.</p>
+            <hr />
+            <button id="cfg-limpar" class="btn btn-danger">Apagar todos os lançamentos</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal de lançamento -->
+  <div id="modal-lancamento" class="modal hidden">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Novo lançamento</h2>
+        <button class="modal-close" data-close>&times;</button>
+      </div>
+      <form id="form-lancamento" class="modal-body">
+        <input type="hidden" id="f-id" />
+        <div class="form-grid">
+          <div class="field">
+            <label for="f-data">Data</label>
+            <input type="date" id="f-data" required />
+          </div>
+          <div class="field">
+            <label for="f-tipo">Tipo</label>
+            <select id="f-tipo" required></select>
+          </div>
+          <div class="field">
+            <label for="f-categoria">Categoria</label>
+            <select id="f-categoria" required></select>
+          </div>
+          <div class="field">
+            <label for="f-app">App</label>
+            <select id="f-app">
+              <option value="">—</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-valor">Valor (R$)</label>
+            <input type="number" id="f-valor" step="0.01" min="0" required />
+          </div>
+          <div class="field">
+            <label for="f-guardado">Guardado (R$)</label>
+            <input type="number" id="f-guardado" step="0.01" min="0" value="0" />
+          </div>
+          <div class="field">
+            <label for="f-km">Km rodados</label>
+            <input type="number" id="f-km" step="0.1" min="0" />
+          </div>
+          <div class="field">
+            <label for="f-referencia">Referência</label>
+            <select id="f-referencia">
+              <option value="Diario">Diário</option>
+              <option value="Semanal">Semanal</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="f-descricao">Descrição</label>
+            <input type="text" id="f-descricao" placeholder="Faturamento do dia" />
+          </div>
+          <div class="field full">
+            <label for="f-observacao">Observação</label>
+            <input type="text" id="f-observacao" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close>Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="js/credentials.js"></script>
+  <script src="js/seed-data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/resumos.js"></script>
+  <script src="js/resumos-ui.js"></script>
+  <script src="js/lancamentos.js"></script>
+  <script src="js/config-ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

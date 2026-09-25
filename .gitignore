@@ -1,0 +1,8 @@
+.DS_Store
+.vscode/
+.idea/
+*.log
+node_modules/
+seed-data.json
+CONTROLE20-20RESERVA.xlsx
+
