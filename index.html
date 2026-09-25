@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0f172a" />
   <title>Controle Motofrete</title>
-  <link rel="stylesheet" href="styles.css?v=11" />
+  <link rel="stylesheet" href="styles.css?v=12" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="apple-touch-icon" href="favicon.svg" />
@@ -133,8 +133,15 @@
             <button id="filter-limpar" class="btn btn-secondary btn-icon" title="Limpar filtros" data-icon="x"></button>
           </div>
           <div class="btn-row">
-            <button class="btn btn-secondary" data-export="excel:lancamentos" title="Exportar em Excel"><span data-icon="fileXls"></span><span class="btn-label">Excel</span></button>
-            <button class="btn btn-secondary" data-export="pdf:lancamentos" title="Exportar em PDF"><span data-icon="filePdf"></span><span class="btn-label">PDF</span></button>
+            <div class="dropdown">
+              <button class="btn btn-secondary" data-dropdown="menu-export-lanc" aria-haspopup="true">
+                <span data-icon="download"></span>Exportar<span data-icon="chevronDown" class="chev"></span>
+              </button>
+              <div class="dropdown-menu" id="menu-export-lanc" role="menu">
+                <button data-export="excel:lancamentos" role="menuitem"><span data-icon="fileXls"></span>Excel</button>
+                <button data-export="pdf:lancamentos" role="menuitem"><span data-icon="filePdf"></span>PDF</button>
+              </div>
+            </div>
             <button id="btn-novo" class="btn btn-primary"><span data-icon="plus"></span>Novo</button>
           </div>
         </div>
@@ -166,8 +173,15 @@
         <div class="toolbar">
           <h2 class="panel-title">Resumo Semanal</h2>
           <div class="btn-row">
-            <button class="btn btn-secondary" data-export="excel:semanal" title="Exportar em Excel"><span data-icon="fileXls"></span>Excel</button>
-            <button class="btn btn-secondary" data-export="pdf:semanal" title="Exportar em PDF"><span data-icon="filePdf"></span>PDF</button>
+            <div class="dropdown">
+              <button class="btn btn-secondary" data-dropdown="menu-export-sem" aria-haspopup="true">
+                <span data-icon="download"></span>Exportar<span data-icon="chevronDown" class="chev"></span>
+              </button>
+              <div class="dropdown-menu" id="menu-export-sem" role="menu">
+                <button data-export="excel:semanal" role="menuitem"><span data-icon="fileXls"></span>Excel</button>
+                <button data-export="pdf:semanal" role="menuitem"><span data-icon="filePdf"></span>PDF</button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="table-wrapper">
@@ -196,10 +210,18 @@
         <div class="toolbar">
           <h2 class="panel-title">Resumo Mensal</h2>
           <div class="btn-row">
-            <button class="btn btn-secondary" data-export="excel:mensal" title="Exportar mensal em Excel"><span data-icon="fileXls"></span>Excel</button>
-            <button class="btn btn-secondary" data-export="pdf:mensal" title="Exportar mensal em PDF"><span data-icon="filePdf"></span>PDF</button>
-            <button class="btn btn-secondary" data-export="excel:all" title="Todos os dados em um Excel"><span data-icon="fileXls"></span>Excel completo</button>
-            <button class="btn btn-secondary" data-export="pdf:all" title="Todos os dados em um PDF"><span data-icon="filePdf"></span>PDF completo</button>
+            <div class="dropdown">
+              <button class="btn btn-secondary" data-dropdown="menu-export-men" aria-haspopup="true">
+                <span data-icon="download"></span>Exportar<span data-icon="chevronDown" class="chev"></span>
+              </button>
+              <div class="dropdown-menu" id="menu-export-men" role="menu">
+                <button data-export="excel:mensal" role="menuitem"><span data-icon="fileXls"></span>Excel — resumo mensal</button>
+                <button data-export="pdf:mensal" role="menuitem"><span data-icon="filePdf"></span>PDF — resumo mensal</button>
+                <hr />
+                <button data-export="excel:all" role="menuitem"><span data-icon="fileXls"></span>Excel — tudo</button>
+                <button data-export="pdf:all" role="menuitem"><span data-icon="filePdf"></span>PDF — tudo</button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="summary-cards" id="totais-gerais"></div>
@@ -373,16 +395,16 @@
 
   <button id="fab-novo" class="fab" title="Novo lançamento" aria-label="Novo lançamento" data-icon="plus"></button>
 
-  <script src="js/credentials.js?v=11"></script>
-  <script src="js/auth.js?v=11"></script>
-  <script src="js/icons.js?v=11"></script>
-  <script src="js/seed-data.js?v=11"></script>
-  <script src="js/storage.js?v=11"></script>
-  <script src="js/resumos.js?v=11"></script>
-  <script src="js/resumos-ui.js?v=11"></script>
-  <script src="js/lancamentos.js?v=11"></script>
-  <script src="js/config-ui.js?v=11"></script>
-  <script src="js/export.js?v=11"></script>
-  <script src="js/app.js?v=11"></script>
+  <script src="js/credentials.js?v=12"></script>
+  <script src="js/auth.js?v=12"></script>
+  <script src="js/icons.js?v=12"></script>
+  <script src="js/seed-data.js?v=12"></script>
+  <script src="js/storage.js?v=12"></script>
+  <script src="js/resumos.js?v=12"></script>
+  <script src="js/resumos-ui.js?v=12"></script>
+  <script src="js/lancamentos.js?v=12"></script>
+  <script src="js/config-ui.js?v=12"></script>
+  <script src="js/export.js?v=12"></script>
+  <script src="js/app.js?v=12"></script>
 </body>
 </html>

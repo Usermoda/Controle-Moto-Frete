@@ -410,6 +410,55 @@ input[type="password"], select {
   flex-wrap: wrap;
 }
 
+/* ===== Dropdown menu ===== */
+.dropdown { position: relative; display: inline-block; }
+.dropdown .chev {
+  margin-left: 2px;
+  transition: transform 0.15s;
+  display: inline-flex;
+}
+.dropdown .chev > svg { width: 14px; height: 14px; }
+.dropdown.open .chev { transform: rotate(180deg); }
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 220px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 6px;
+  z-index: 50;
+}
+.dropdown.open .dropdown-menu { display: block; }
+.dropdown-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 14px;
+  font-family: inherit;
+  min-height: 40px;
+  white-space: nowrap;
+}
+.dropdown-menu button:hover { background: var(--bg-elev-2); }
+.dropdown-menu button > [data-icon] > svg { width: 18px; height: 18px; }
+.dropdown-menu hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 4px 0;
+}
+
 /* ===== FAB (mobile only) ===== */
 .fab {
   display: none;

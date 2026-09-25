@@ -258,6 +258,7 @@ window.addEventListener('DOMContentLoaded', () => {
   initLancamentosUI();
   initConfigUI();
   initExportUI();
+  initDropdowns();
   initLoginUI();
   // FAB (mobile) — reusa handler do botão novo
   const $fab = document.getElementById('fab-novo');
