@@ -277,6 +277,9 @@ html, body {
 
 .panel-title { margin: 0; font-size: 18px; font-weight: 600; }
 
+/* Desktop: filtro do mensal com largura razoável */
+#filter-mensal-mes { max-width: 220px; }
+
 /* ===== Toolbar / filters ===== */
 .toolbar {
   display: flex;
@@ -823,6 +826,28 @@ input[type="password"], select {
 
   /* Botão X limpar mais compacto no mobile */
   #filter-limpar { min-width: 40px; width: 40px; height: 40px; padding: 0; }
+
+  /* Toolbar do Mensal: título full-width, filtro + exportar lado a lado */
+  .toolbar:has(#filter-mensal-mes) {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "title  title"
+      "filter export";
+    gap: 8px;
+    align-items: center;
+  }
+  #mensal-title { grid-area: title; }
+  #filter-mensal-mes {
+    grid-area: filter;
+    max-width: none;
+    width: 100%;
+  }
+  .toolbar:has(#filter-mensal-mes) .btn-row {
+    grid-area: export;
+    justify-self: end;
+    width: auto;
+  }
 
   /* Toolbar da aba Lançamentos: grid compacto (sem buracos) */
   .toolbar:has(.filters) {
