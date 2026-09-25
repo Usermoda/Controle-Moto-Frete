@@ -2,6 +2,7 @@
 const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
 const LS_CREDS = 'motofrete.creds';
 const LS_CACHE = 'motofrete.cache';
+const LS_SYNCED_AT = 'motofrete.syncedAt';
 
 function getCreds() {
   try {
@@ -48,7 +49,10 @@ async function loadRemote() {
   });
   if (!res.ok) throw new Error(`Falha ao carregar (HTTP ${res.status})`);
   const data = await res.json();
-  try { localStorage.setItem(LS_CACHE, JSON.stringify(data)); } catch {}
+  try {
+    localStorage.setItem(LS_CACHE, JSON.stringify(data));
+    localStorage.setItem(LS_SYNCED_AT, new Date().toISOString());
+  } catch {}
   return data;
 }
 
@@ -57,6 +61,14 @@ function loadCache() {
     const raw = localStorage.getItem(LS_CACHE);
     return raw ? JSON.parse(raw) : null;
   } catch { return null; }
+}
+
+function getLastSyncedAt() {
+  return localStorage.getItem(LS_SYNCED_AT);
+}
+
+function hasCache() {
+  return !!localStorage.getItem(LS_CACHE);
 }
 
 async function saveRemote(data) {
@@ -74,7 +86,10 @@ async function saveRemote(data) {
     const txt = await res.text();
     throw new Error(`Falha ao salvar (HTTP ${res.status}): ${txt.slice(0, 150)}`);
   }
-  try { localStorage.setItem(LS_CACHE, JSON.stringify(data)); } catch {}
+  try {
+    localStorage.setItem(LS_CACHE, JSON.stringify(data));
+    localStorage.setItem(LS_SYNCED_AT, new Date().toISOString());
+  } catch {}
   return res.json();
 }
 

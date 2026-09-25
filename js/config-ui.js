@@ -119,6 +119,9 @@ function initConfigUI() {
   const $btnInstalar = document.querySelector('#cfg-instalar');
   if ($btnInstalar) $btnInstalar.onclick = () => mostrarComoInstalar();
 
+  const $btnSync = document.querySelector('#cfg-sincronizar');
+  if ($btnSync) $btnSync.onclick = () => sincronizarDaNuvem();
+
   document.querySelector('#cfg-limpar').onclick = async () => {
     if (!confirm('Apagar TODOS os lançamentos? Esta ação não pode ser desfeita.')) return;
     const c = prompt('Digite APAGAR para confirmar:');

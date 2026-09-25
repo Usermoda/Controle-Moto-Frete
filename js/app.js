@@ -82,17 +82,19 @@ function bindSetup() {
 function bindSyncStatus() {
   const $wrap = document.getElementById('sync-status');
   const $label = $wrap.querySelector('.sync-label');
-  onSyncStatus((status, message) => {
+  const render = (status, message) => {
     $wrap.className = 'sync-status ' + status;
     $label.textContent = ({
       saved: 'Salvo',
       saving: 'Salvando...',
       pending: 'Pendente',
-      error: 'Erro ao salvar',
+      error: 'Erro',
       offline: 'Offline'
     })[status] || status;
     $wrap.title = message || '';
-  });
+  };
+  onSyncStatus(render);
+  _syncStatusFn = render;
 }
 
 function bindTabs() {
@@ -118,29 +120,69 @@ function toast(message, type = 'info') {
   setTimeout(() => $t.classList.add('hidden'), 3000);
 }
 
+function applyData(data) {
+  state.data = {
+    version: data.version || 1,
+    config: { ...DEFAULT_CONFIG, ...(data.config || {}) },
+    lancamentos: Array.isArray(data.lancamentos) ? data.lancamentos : []
+  };
+}
+
+// Bootstrap: cache-first, só baixa do JSONBin se não tiver cache local
 async function bootstrapApp() {
   showApp();
+  const cache = loadCache();
+  if (cache) {
+    applyData(cache);
+    setSyncStatus('saved', `Local (última sync: ${fmtSyncTime(getLastSyncedAt())})`);
+    reRenderAll();
+    return;
+  }
+  // Primeira vez ou cache foi limpo — baixa do remoto
   try {
+    setSyncStatus('saving', 'Baixando dados do JSONBin...');
     const remote = await loadRemote();
-    state.data = {
-      version: remote.version || 1,
-      config: { ...DEFAULT_CONFIG, ...(remote.config || {}) },
-      lancamentos: Array.isArray(remote.lancamentos) ? remote.lancamentos : []
-    };
+    applyData(remote);
+    setSyncStatus('saved', 'Baixado do JSONBin');
   } catch (err) {
     toast('Erro ao carregar do JSONBin: ' + err.message, 'error');
-    const cache = loadCache();
-    if (cache) {
-      state.data = {
-        version: cache.version || 1,
-        config: { ...DEFAULT_CONFIG, ...(cache.config || {}) },
-        lancamentos: Array.isArray(cache.lancamentos) ? cache.lancamentos : []
-      };
-      toast('Usando cache local.', 'info');
-    }
+    setSyncStatus('error', err.message);
+    applyData({}); // vazio
   }
   reRenderAll();
 }
+
+// Sync manual — força GET do JSONBin
+async function sincronizarDaNuvem() {
+  if (!confirm('Isso vai substituir os dados locais pelos do JSONBin. Alterações locais não salvas serão perdidas. Continuar?')) return;
+  try {
+    setSyncStatus('saving', 'Baixando do JSONBin...');
+    const remote = await loadRemote();
+    applyData(remote);
+    setSyncStatus('saved', 'Sincronizado');
+    reRenderAll();
+    toast('Dados atualizados da nuvem', 'success');
+  } catch (err) {
+    setSyncStatus('error', err.message);
+    toast('Erro: ' + err.message, 'error');
+  }
+}
+
+function fmtSyncTime(iso) {
+  if (!iso) return 'nunca';
+  const d = new Date(iso);
+  const now = new Date();
+  const diffMin = Math.floor((now - d) / 60000);
+  if (diffMin < 1) return 'agora';
+  if (diffMin < 60) return `${diffMin} min atrás`;
+  const diffH = Math.floor(diffMin / 60);
+  if (diffH < 24) return `${diffH}h atrás`;
+  return d.toLocaleDateString('pt-BR');
+}
+
+// Callback do sync status pra facilitar setar depois do bootstrap
+let _syncStatusFn = null;
+function setSyncStatus(status, message) { if (_syncStatusFn) _syncStatusFn(status, message); }
 
 async function loadSeed() {
   const seedLancs = SEED_DATA.lancamentos.map(l => ({
