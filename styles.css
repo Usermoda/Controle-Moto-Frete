@@ -292,7 +292,15 @@ html, body {
   gap: 8px;
   align-items: center;
   flex-wrap: wrap;
+  flex: 1;
 }
+.filters .input {
+  width: auto;
+  min-width: 150px;
+  flex: 0 1 auto;
+}
+.filters .chips { flex: 0 0 auto; }
+.filters #filter-limpar { flex: 0 0 auto; margin-left: auto; }
 
 .chips {
   display: inline-flex;
@@ -748,8 +756,22 @@ input[type="password"], select {
 
   /* Toolbar mais compacto */
   .toolbar { gap: 8px; }
-  .filters { width: 100%; }
-  .filters .input { flex: 1; min-width: 0; }
+  .filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    grid-template-areas:
+      "mes categoria limpar"
+      "app app app"
+      "tipo tipo tipo";
+    width: 100%;
+    gap: 6px;
+  }
+  #filter-mes { grid-area: mes; }
+  #filter-categoria { grid-area: categoria; }
+  #filter-app { grid-area: app; }
+  #filter-tipo { grid-area: tipo; overflow-x: auto; }
+  #filter-limpar { grid-area: limpar; margin-left: 0; }
+  .filters .input { width: 100%; min-width: 0; }
 
   /* Cards de resumo em duas colunas */
   .summary-cards {
