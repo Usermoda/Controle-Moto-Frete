@@ -8,7 +8,10 @@ const CAT_MANUTENCAO = 'Manutencao';
 
 function derivarCamposData(isoDate) {
   if (!isoDate) return { mes: null, semana: null, diaSemana: null };
-  const [y, m, d] = isoDate.split('-').map(Number);
+  // Normaliza pra "YYYY-MM-DD" (aceita full ISO datetime também)
+  const s = String(isoDate).slice(0, 10);
+  const [y, m, d] = s.split('-').map(Number);
+  if (!y || !m || !d) return { mes: null, semana: null, diaSemana: null };
   const date = new Date(y, m - 1, d);
   const mes = MESES[m - 1];
   const primeiroDia = new Date(y, m - 1, 1);
@@ -17,6 +20,12 @@ function derivarCamposData(isoDate) {
   const semana = `Semana ${Math.min(semanaNum, 5)}`;
   const diaSemana = DIAS_SEMANA[date.getDay()];
   return { mes, semana, diaSemana };
+}
+
+// Normaliza qualquer data pra "YYYY-MM-DD"
+function normalizarData(input) {
+  if (!input) return '';
+  return String(input).slice(0, 10);
 }
 
 function categoriaDespesaOutra(cat) {

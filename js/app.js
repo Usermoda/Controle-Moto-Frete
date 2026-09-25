@@ -123,10 +123,17 @@ function toast(message, type = 'info') {
 }
 
 function applyData(data) {
+  const lancs = Array.isArray(data.lancamentos) ? data.lancamentos : [];
+  // Migration: normaliza datas com formato ISO datetime pra YYYY-MM-DD
+  for (const l of lancs) {
+    if (l.data && typeof l.data === 'string' && l.data.length > 10) {
+      l.data = l.data.slice(0, 10);
+    }
+  }
   state.data = {
     version: data.version || 1,
     config: { ...DEFAULT_CONFIG, ...(data.config || {}) },
-    lancamentos: Array.isArray(data.lancamentos) ? data.lancamentos : []
+    lancamentos: lancs
   };
 }
 

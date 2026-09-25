@@ -113,7 +113,7 @@ function populateSelect(el, options) {
 async function submitForm(e) {
   e.preventDefault();
   const id = $('#f-id').value;
-  const data = $('#f-data').value;
+  const data = normalizarData($('#f-data').value);
   const derived = derivarCamposData(data);
   const lanc = {
     id: id || uid(),
@@ -166,8 +166,10 @@ function ordenarLancs(list) {
 
 function fmtData(l) {
   if (l.data) {
-    const [y, m, d] = l.data.split('-');
-    return `${d}/${m}/${y.slice(2)}`;
+    // Aceita "YYYY-MM-DD" ou "YYYY-MM-DDTHH:MM:SS..." — extrai só a data
+    const isoDate = String(l.data).slice(0, 10);
+    const [y, m, d] = isoDate.split('-');
+    if (y && m && d) return `${d}/${m}/${y.slice(2)}`;
   }
   return l.semana || '—';
 }
