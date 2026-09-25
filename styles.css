@@ -803,34 +803,46 @@ input[type="password"], select {
   .app-header { padding: 10px 12px; padding-top: max(10px, var(--sat)); }
   .brand { font-size: 16px; }
 
-  /* Toolbar empilhado em coluna no mobile */
+  /* Toolbar genérica (Semanal/Mensal) empilhada em coluna */
   .toolbar {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
   }
   .toolbar .btn-row {
-    width: 100%;
     justify-content: flex-end;
   }
-  .filters {
+
+  /* Toolbar da aba Lançamentos: grid compacto (sem buracos) */
+  .toolbar:has(.filters) {
     display: grid;
     grid-template-columns: 1fr 1fr auto;
     grid-template-areas:
-      "mes categoria limpar"
-      "app app app"
-      "tipo tipo tipo";
-    width: 100%;
-    gap: 6px;
-    flex: none;
+      "mes  categoria limpar"
+      "app  app       app"
+      "tipo tipo      export";
+    gap: 8px;
+    align-items: center;
+  }
+  /* Filhos de .filters entram direto na grid do toolbar */
+  .toolbar:has(.filters) .filters { display: contents; }
+  .toolbar:has(.filters) .btn-row {
+    grid-area: export;
+    justify-self: end;
+    width: auto;
   }
   #filter-mes { grid-area: mes; }
   #filter-categoria { grid-area: categoria; }
   #filter-app { grid-area: app; }
-  #filter-tipo { grid-area: tipo; overflow-x: auto; scrollbar-width: none; }
+  #filter-tipo {
+    grid-area: tipo;
+    overflow-x: auto;
+    scrollbar-width: none;
+    min-width: 0;
+  }
   #filter-tipo::-webkit-scrollbar { display: none; }
   #filter-limpar { grid-area: limpar; margin-left: 0; }
-  .filters .input { width: 100%; min-width: 0; }
+  .filters .input { width: 100%; min-width: 0; flex: none; }
 
   /* Cards de resumo em duas colunas */
   .summary-cards {
